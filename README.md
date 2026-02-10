@@ -6,7 +6,7 @@ The work is structured into **two experiments**, where the second experiment is 
 
 ---
 
-## 📌 Motivation
+## Motivation
 
 Document images captured using mobile cameras often suffer from:
 - Motion blur and sensor noise
@@ -18,19 +18,18 @@ Generic image restoration models are not always well-suited for these challenges
 This repository explores that hypothesis empirically.
 
 ---
+## Experiments Overview
 
-## 🧪 Experiments Overview
-
-### 🔬 Experiment 1: NAFNet (Baseline)
+### Experiment 1: NAFNet (Baseline)
 - Uses **NAFNet**, a lightweight CNN-based image restoration model
 - Fine-tuned on paired document images
 - Serves as a **baseline** to evaluate generic restoration capability
 
-➡️ Result: Handles denoising and mild blur but struggles with shadows and geometry.
+Result: Handles denoising and mild blur but struggles with shadows and geometry.
 
 ---
 
-### 🔬 Experiment 2: DocRes (Document-Specific)
+### Experiment 2: DocRes (Document-Specific)
 - Uses a **task-aware document restoration architecture**
 - Handles multiple restoration tasks such as:
   - Deblurring
@@ -40,7 +39,7 @@ This repository explores that hypothesis empirically.
   - Binarization
 - Uses **prompt-based conditioning and Transformer attention**
 
-➡️ Result: Significantly improved restoration quality for real document images.
+ Result: Significantly improved restoration quality for real document images.
 
 ---
 

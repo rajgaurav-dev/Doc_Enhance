@@ -3,7 +3,7 @@ import cv2
 import torch
 import numpy as np
 from torchvision.utils import make_grid
-
+from model import NAFNet
 # ---------------------------------
 # Image I/O utilities
 # ---------------------------------
@@ -159,3 +159,41 @@ def tiled_inference(
 
     return (output / weight).squeeze(0)
 
+
+# -------------------------------------------------
+# Load model and Freeze weights
+# -------------------------------------------------
+def load_nafnet(weights_path: str, device: str, evaluation:bool=False) -> torch.nn.Module:
+    """
+    Load pretrained NAFNet model.
+
+    Args:
+        weights_path (str): Path to model weights
+        device (str): 'cuda' or 'cpu'
+
+    Returns:
+        torch.nn.Module
+    """
+    model = NAFNet(
+        width=64,
+        enc_blk_nums=[2, 2, 4, 8],
+        middle_blk_num=12,
+        dec_blk_nums=[2, 2, 2, 2],
+    )
+
+    state = torch.load(weights_path, map_location=device)
+    model.load_state_dict(state.get("params", state), strict=True)
+
+    model.to(device)
+    
+    if evaluation:
+        model.eval()
+    return model
+
+def freeze_nafnet_layers(model, freeze_encoders=2):
+    for p in model.intro.parameters():
+        p.requires_grad = False
+
+    for i in range(min(freeze_encoders, len(model.encoders))):
+        for p in model.encoders[i].parameters():
+            p.requires_grad = False

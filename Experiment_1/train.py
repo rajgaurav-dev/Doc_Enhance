@@ -15,6 +15,7 @@ from loss import (
     PerceptualLoss
 )
 
+from utils import freeze_nafnet_layers, load_nafnet
 # --------------------------------------------------
 # CONFIG
 # --------------------------------------------------
@@ -58,7 +59,8 @@ val_loader = DataLoader(
 # --------------------------------------------------
 model = load_nafnet(
     weights_path="experiments/pretrained_models/NAFNet-SIDD-width64.pth",
-    device=DEVICE
+    device=DEVICE,
+    evluation = True
 )
 
 # Freeze early layers if needed
@@ -141,7 +143,7 @@ for epoch in range(EPOCHS):
 
     # ---------------- UNFREEZE ----------------
     if epoch == 10:
-        print("🔓 Unfreezing all layers & lowering LR")
+        print("Unfreezing all layers & lowering LR")
         for p in model.parameters():
             p.requires_grad = True
         optimizer = torch.optim.Adam(model.parameters(), lr=1e-5)
@@ -150,4 +152,4 @@ for epoch in range(EPOCHS):
     if val_loss < best_val_loss:
         best_val_loss = val_loss
         torch.save(model.state_dict(), "nafnet_document_best.pth")
-        print("✅ Saved best model")
+        print("Saved best model")
